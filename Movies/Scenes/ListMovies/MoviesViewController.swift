@@ -7,33 +7,18 @@ class MoviesViewController: UITableViewController {
     private var movies: [Movie] = []
 
     let favoriteMoviesManager = DefaultFavoriteMoviesManager.standard
+    let movieProvider = OMDBMovieProvider()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // request movies data
-        let url = URL(string: "https://www.omdbapi.com/?s=Batman&apikey=d0e82791")!
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            DispatchQueue.main.async {
-                self?.handleResponse(data: data, error: error)
-            }
-        }.resume()
-    }
-
-    // process movie data or error
-    func handleResponse(data: Data?, error: Error?) {
-        guard error == nil, let data = data else {
-            self.showErrorAlert()
-            return
-        }
-
-        do {
-            let response = try JSONDecoder().decode(OMDBSearchResponse<Movie>.self, from: data)
-            self.movies = response.search
+        movieProvider.fetchMovies { error, movies in
+            self.movies = movies
             self.tableView.reloadData()
-        } catch {
-            debugPrint(error)
-            self.showErrorAlert()
+            if error != nil {
+                self.showErrorAlert()
+            }
         }
     }
 
