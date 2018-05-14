@@ -8,13 +8,11 @@ class ListMoviesPresenter {
         self.favoritesManager = favoritesManager
     }
 
-    func presentMovie(_ movie: Movie) -> MovieViewModel {
-        return MovieViewModel(movie: movie,
-                              fullTitle: "\(movie.title) (\(movie.year))",
-                              isFavorite: favoritesManager.isFavorite(movie: movie))
-    }
-
-    func presentMovies(_ movies: [Movie]) -> [MovieViewModel] {
-        return movies.map { presentMovie($0) }
+    func presentMovie(_ movie: Movie, tapHandler: @escaping () -> Void) -> MovieViewModel {
+        return MovieViewModel(
+            fullTitle: "\(movie.title) (\(movie.year))",
+            isFavorite: favoritesManager.isFavorite(movie: movie),
+            tapHandler: tapHandler
+        )
     }
 }

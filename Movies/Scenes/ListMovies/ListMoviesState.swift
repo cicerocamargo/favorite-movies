@@ -27,25 +27,23 @@ class ListMoviesState {
     }
 
     private func handleMoviesResult(error: Error?, movies: [Movie]) {
-        self.movies = presenter.presentMovies(movies)
-        DispatchQueue.main.async {
-            self.delegate?.didUpdateMovies()
+        self.movies = movies.enumerated().map { index, movie in
+            presenter.presentMovie(movie, tapHandler: { [weak self] in
+                self?.toggleFavorite(movie: movie, index: index)
+            })
         }
+        delegate?.didUpdateMovies()
 
         if error != nil {
-            DispatchQueue.main.async {
-                self.delegate?.didFailToFetchMovies()
-            }
+            delegate?.didFailToFetchMovies()
         }
     }
 
-    func handleTap(at index: Int) {
-        guard index < movies.count else { return }
-        let movie = movies[index].movie
+    private func toggleFavorite(movie: Movie, index: Int) {
         favoritesManager.toggleIsFavorite(movie: movie)
-        movies[index] = presenter.presentMovie(movie)
-        DispatchQueue.main.async {
-            self.delegate?.didUpdateMovie(at: index)
-        }
+        movies[index] = presenter.presentMovie(movie, tapHandler: { [weak self] in
+            self?.toggleFavorite(movie: movie, index: index)
+        })
+        delegate?.didUpdateMovie(at: index)
     }
 }
