@@ -96,7 +96,6 @@
 		043D8A1E20A92D1D008DF243 /* ListMovies */ = {
 			isa = PBXGroup;
 			children = (
-				049A0E1920A913E800BFF413 /* OMDBSearchResponse.swift */,
 				049A0DF920A90FC100BFF413 /* MoviesViewController.swift */,
 			);
 			path = ListMovies;
@@ -148,6 +147,7 @@
 		043D8A2E20A937DA008DF243 /* MovieProvider */ = {
 			isa = PBXGroup;
 			children = (
+				049A0E1920A913E800BFF413 /* OMDBSearchResponse.swift */,
 				043D8A2B20A9377F008DF243 /* MovieProvider.swift */,
 			);
 			path = MovieProvider;
