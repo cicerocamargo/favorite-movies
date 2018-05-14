@@ -28,14 +28,10 @@ class ListMoviesState {
 
     private func handleMoviesResult(error: Error?, movies: [Movie]) {
         self.movies = presenter.presentMovies(movies)
-        DispatchQueue.main.async {
-            self.delegate?.didUpdateMovies()
-        }
+        delegate?.didUpdateMovies()
 
         if error != nil {
-            DispatchQueue.main.async {
-                self.delegate?.didFailToFetchMovies()
-            }
+            delegate?.didFailToFetchMovies()
         }
     }
 
@@ -44,8 +40,6 @@ class ListMoviesState {
         let movie = movies[index].movie
         favoritesManager.toggleIsFavorite(movie: movie)
         movies[index] = presenter.presentMovie(movie)
-        DispatchQueue.main.async {
-            self.delegate?.didUpdateMovie(at: index)
-        }
+        delegate?.didUpdateMovie(at: index)
     }
 }

@@ -10,7 +10,7 @@ class ListMoviesViewController: UITableViewController {
         self.state = state
         super.init(style: .plain)
         state.delegate = self
-        title = "Batman Movies"
+        title = "My Favorite Batman Movies"
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -42,17 +42,23 @@ class ListMoviesViewController: UITableViewController {
 
 extension ListMoviesViewController: ListMoviesStateDelegate {
     func didFailToFetchMovies() {
-        let alert = UIAlertController(title: "Error", message: "Failed to load Batman Movies", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Error", message: "Failed to load movies", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
+        }
     }
 
     func didUpdateMovies() {
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 
     func didUpdateMovie(at index: Int) {
-        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        DispatchQueue.main.async {
+            self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }
     }
 
 
