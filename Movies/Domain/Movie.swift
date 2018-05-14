@@ -5,7 +5,7 @@ struct Movie: Codable {
     let year: String
     let imdbId: String?
     let type: String
-    let poster: URL
+    let poster: URL?
 
     enum CodingKeys: String, CodingKey {
         case title = "Title"

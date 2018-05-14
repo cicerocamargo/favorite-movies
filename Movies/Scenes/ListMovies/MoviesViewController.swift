@@ -4,7 +4,9 @@ private let favoriteMoviesKey = "favoriteMovies"
 
 class MoviesViewController: UITableViewController {
 
-    var movies: [Movie] = []
+    private var movies: [Movie] = []
+
+    let favoriteMoviesManager = DefaultFavoriteMoviesManager.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,9 +56,7 @@ class MoviesViewController: UITableViewController {
         cell.textLabel?.text = "\(movie.title) (\(movie.year))"
 
         // check if movie is favorite in the local database and set star icon accordingly
-        let favoriteMovieIds = UserDefaults.standard.object(forKey: favoriteMoviesKey) as? [String] ?? []
-        let isFavorite = favoriteMovieIds.contains(movie.uid)
-        cell.accessoryView = UIImageView(image: isFavorite ? #imageLiteral(resourceName: "star-full") : #imageLiteral(resourceName: "star-empty"))
+        cell.accessoryView = UIImageView(image: favoriteMoviesManager.isFavorite(movie: movie) ? #imageLiteral(resourceName: "star-full") : #imageLiteral(resourceName: "star-empty"))
 
         return cell
     }
@@ -65,13 +65,7 @@ class MoviesViewController: UITableViewController {
 
         // toogle movie in favorites database
         let movie = movies[indexPath.row]
-        var favoriteMovieIds = UserDefaults.standard.value(forKey: favoriteMoviesKey) as? [String] ?? []
-        if favoriteMovieIds.index(of: movie.uid) != nil {
-            favoriteMovieIds = favoriteMovieIds.filter { $0 != movie.uid }
-        } else {
-            favoriteMovieIds.append(movie.uid)
-        }
-        UserDefaults.standard.set(favoriteMovieIds, forKey: favoriteMoviesKey)
+        favoriteMoviesManager.toggleIsFavorite(movie: movie)
 
         // tell table view to reload row
         tableView.reloadRows(at: [indexPath], with: .automatic)
