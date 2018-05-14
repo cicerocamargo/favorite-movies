@@ -14,10 +14,12 @@ class MoviesViewController: UITableViewController {
 
         // request movies data
         movieProvider.fetchMovies { error, movies in
-            self.movies = movies
-            self.tableView.reloadData()
-            if error != nil {
-                self.showErrorAlert()
+            DispatchQueue.main.async {
+                self.movies = movies
+                self.tableView.reloadData()
+                if error != nil {
+                    self.showErrorAlert()
+                }
             }
         }
     }
