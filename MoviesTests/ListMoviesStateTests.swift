@@ -57,7 +57,7 @@ class ListMoviesStateTests: XCTestCase {
         state.fetchInitialData()
 
         // act
-        state.handleTap(at: 0)
+        state.movies.first?.tapHandler()
 
         // assert
         XCTAssert(favoritesManagerMock.favoriteMovieId == "asdf")

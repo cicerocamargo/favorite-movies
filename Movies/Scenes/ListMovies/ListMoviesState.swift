@@ -27,7 +27,11 @@ class ListMoviesState {
     }
 
     private func handleMoviesResult(error: Error?, movies: [Movie]) {
-        self.movies = presenter.presentMovies(movies)
+        self.movies = movies.enumerated().map { index, movie in
+            presenter.presentMovie(movie, tapHandler: { [weak self] in
+                self?.toggleFavorite(movie: movie, index: index)
+            })
+        }
         delegate?.didUpdateMovies()
 
         if error != nil {
@@ -35,11 +39,11 @@ class ListMoviesState {
         }
     }
 
-    func handleTap(at index: Int) {
-        guard index < movies.count else { return }
-        let movie = movies[index].movie
+    private func toggleFavorite(movie: Movie, index: Int) {
         favoritesManager.toggleIsFavorite(movie: movie)
-        movies[index] = presenter.presentMovie(movie)
+        movies[index] = presenter.presentMovie(movie, tapHandler: { [weak self] in
+            self?.toggleFavorite(movie: movie, index: index)
+        })
         delegate?.didUpdateMovie(at: index)
     }
 }

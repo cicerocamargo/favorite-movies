@@ -36,7 +36,7 @@ class ListMoviesViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        state.handleTap(at: indexPath.row)
+        state.movies[indexPath.row].tapHandler()
     }
 }
 
